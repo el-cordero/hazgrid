@@ -1,0 +1,45 @@
+---
+title: "Tsunami Workflow"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Tsunami Workflow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+library(hazgrid)
+library(terra)
+ext <- function(filename) system.file("extdata", filename, package = "hazgrid")
+```
+
+`hazgrid` separates tsunami hazard preparation, hazard extraction, damage
+probabilities, and expected economic loss. The bundled lookup tables use
+invented demonstration values and must not be treated as official Hazus values.
+
+## Level 2: Depth and velocity
+
+```{r level2}
+inventory <- read_inventory(ext("synthetic_buildings.gpkg"))
+depth <- rast(ext("synthetic_depth.tif"))
+velocity <- rast(ext("synthetic_velocity.tif"))
+
+hazard_l2 <- prepare_tsunami_hazard(depth, velocity = velocity)
+exposure_l2 <- extract_hazard(hazard_l2, inventory)
+damage_l2 <- tsunami_damage(exposure_l2, ext("tsunami_fragility_example.csv"))
+loss_l2 <- tsunami_economic_loss(damage_l2, ext("tsunami_loss_ratios_example.csv"))
+summarize_by(loss_l2, "municipality")
+```
+
+## Level 3: Depth and momentum flux
+
+```{r level3}
+flux <- compute_tsunami_momentum_flux(depth, velocity)
+hazard_l3 <- prepare_tsunami_hazard(depth, momentum_flux = flux)
+names(hazard_l3)
+```
+
+The structural layer is `HV2`. Nonstructural, contents, and the casualty MVP
+use `H`. `tsunami_casualty_mvp()` is intentionally a replaceable placeholder,
+not the complete Hazus casualty model.

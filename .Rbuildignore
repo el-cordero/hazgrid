@@ -1,0 +1,8 @@
+^existing$
+^data-raw$
+^\.git$
+^\.DS_Store$
+^hazgrid\.Rcheck$
+^hazgrid_.*\.tar\.gz$
+^.*\.Rproj$
+^\.Rproj\.user$

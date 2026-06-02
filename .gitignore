@@ -1,0 +1,8 @@
+.DS_Store
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj.user
+existing/
+hazgrid.Rcheck/
+hazgrid_*.tar.gz

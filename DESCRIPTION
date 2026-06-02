@@ -1,0 +1,35 @@
+Package: hazgrid
+Title: Programmable Hazus-Style Hazard and Loss Workflows
+Version: 0.1.0
+Authors@R: person("El", "Cordero", role = c("aut", "cre"),
+    email = "el.cordero@example.com")
+Description: Provides transparent, staged, terra-first building hazard and loss
+    workflows inspired by Federal Emergency Management Agency (FEMA) Hazus
+    methods. The initial implementation supports tsunami depth, velocity, and
+    momentum-flux inputs with user-supplied fragility and loss-ratio tables, plus
+    a small earthquake damage MVP using user-supplied hazard rasters and
+    fragility tables. It is an independent implementation framework and does
+    not reproduce official Hazus results without validated inputs and lookup
+    tables.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Depends:
+    R (>= 4.1.0)
+Imports:
+    stats,
+    terra,
+    utils
+Suggests:
+    DBI,
+    arrow,
+    data.table,
+    dbplyr,
+    dplyr,
+    duckdb,
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+VignetteBuilder: knitr
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
