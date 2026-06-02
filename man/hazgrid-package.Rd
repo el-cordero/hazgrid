@@ -7,16 +7,16 @@
 \title{hazgrid: Programmable Hazus-style workflows}
 \description{
 \code{hazgrid} provides staged, terra-first functions for hazard extraction,
-fragility calculations, loss estimation, casualty MVP calculations, and
-summaries. Tsunami support is the first target. Earthquake support is an MVP
-and is not the full Hazus capacity-spectrum method.
+fragility calculations, loss estimation, casualty calculations, assumptions,
+and summaries. Tsunami support is the first target. Earthquake
+capacity-spectrum implementation is in development.
 }
 \details{
 The package is an independent implementation framework. It is not FEMA
 Hazus, and its demo lookup tables are not official Hazus values.
 }
 \author{
-\strong{Maintainer}: El Cordero \email{el.cordero@example.com}
+\strong{Maintainer}: El Cordero \email{33505811+el-cordero@users.noreply.github.com}
 
 }
 \keyword{internal}

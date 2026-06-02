@@ -8,10 +8,13 @@
 #' @param depth Inundation depth raster or numeric vector.
 #' @param velocity Flow velocity raster or numeric vector.
 #' @param name Output raster layer name.
+#' @param auto_convert_units Convert metric velocity from `"cm/s"` to `"m/s"`.
 #'
 #' @return A raster or numeric vector containing `H * V^2`.
 #' @export
-compute_tsunami_momentum_flux <- function(depth, velocity, name = "HV2") {
+compute_tsunami_momentum_flux <- function(
+  depth, velocity, name = "HV2", auto_convert_units = FALSE
+) {
   raster_mode <- inherits(depth, "SpatRaster") || inherits(velocity, "SpatRaster")
   if (raster_mode) {
     if (!inherits(depth, "SpatRaster") || !inherits(velocity, "SpatRaster")) {
@@ -25,7 +28,13 @@ compute_tsunami_momentum_flux <- function(depth, velocity, name = "HV2") {
   }
   .assert_nonnegative(depth, "depth")
   .assert_nonnegative(velocity, "velocity")
-  .validate_tsunami_units(depth, velocity = velocity)
+  .validate_tsunami_units(
+    depth, velocity = velocity, auto_convert_units = auto_convert_units
+  )
+  velocity_unit <- .normalize_unit(.get_units(velocity), "velocity")
+  if (!is.na(velocity_unit) && velocity_unit == "cm/s") {
+    velocity <- convert_hazard_units(velocity, "cm/s", "m/s", "velocity")
+  }
   output <- depth * velocity^2
   if (raster_mode) {
     names(output) <- name
@@ -47,12 +56,14 @@ compute_tsunami_momentum_flux <- function(depth, velocity, name = "HV2") {
 #' @param velocity Optional single-layer flow velocity raster.
 #' @param momentum_flux Optional single-layer momentum-flux raster.
 #' @param level One of `"auto"`, `"level2"`, or `"level3"`.
+#' @param auto_convert_units Convert metric velocity from `"cm/s"` to `"m/s"`
+#'   before computing momentum flux.
 #'
 #' @return A `terra::SpatRaster` with layers `H`, optional `V`, and `HV2`.
 #' @export
 prepare_tsunami_hazard <- function(
   depth, velocity = NULL, momentum_flux = NULL,
-  level = c("auto", "level2", "level3")
+  level = c("auto", "level2", "level3"), auto_convert_units = FALSE
 ) {
   level <- match.arg(level)
   depth <- .as_raster_input(depth, "depth")
@@ -85,7 +96,13 @@ prepare_tsunami_hazard <- function(
   }
   if (level == "level2") {
     .assert_aligned_rasters(list(depth = depth, velocity = velocity))
-    momentum_flux <- compute_tsunami_momentum_flux(depth, velocity)
+    momentum_flux <- compute_tsunami_momentum_flux(
+      depth, velocity, auto_convert_units = auto_convert_units
+    )
+    velocity_unit <- .normalize_unit(.get_units(velocity), "velocity")
+    if (!is.na(velocity_unit) && velocity_unit == "cm/s") {
+      velocity <- convert_hazard_units(velocity, "cm/s", "m/s", "velocity")
+    }
     names(depth) <- "H"
     names(velocity) <- "V"
     return(c(depth, velocity, momentum_flux))

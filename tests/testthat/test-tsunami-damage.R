@@ -6,7 +6,8 @@ test_that("tsunami damage calculates each component", {
   )
   exposure <- extract_hazard(hazard, inventory)
   damage <- tsunami_damage(
-    exposure, extdata_file("tsunami_fragility_example.csv")
+    exposure, demo_file("demo_tsunami_fragility.csv"),
+    allow_demo_tables = TRUE
   )
   for (component in c("structure", "nonstructural", "contents")) {
     columns <- paste0(
@@ -17,15 +18,14 @@ test_that("tsunami damage calculates each component", {
   }
 })
 
-test_that("casualty MVP returns expected values", {
+test_that("tsunami casualty requires table opt-in for synthetic data", {
   exposure <- data.frame(H = c(0.25, 3), population_day = c(10, 10))
-  params <- data.frame(
-    min_depth = c(-Inf, 1),
-    max_depth = c(1, Inf),
-    fatality_rate = c(0, 0.1),
-    injury_rate = c(0.01, 0.2)
+  table <- demo_file("demo_tsunami_casualty.csv")
+  expect_error(
+    tsunami_casualty(exposure, table),
+    "Demo-only"
   )
-  casualty <- tsunami_casualty_mvp(exposure, params)
-  expect_equal(casualty$expected_fatalities, c(0, 1))
-  expect_equal(casualty$expected_injuries, c(0.1, 2))
+  casualty <- tsunami_casualty(exposure, table, allow_demo_tables = TRUE)
+  expect_equal(casualty$expected_fatalities, c(0, 0.1))
+  expect_equal(casualty$expected_injuries, c(0, 0.5))
 })

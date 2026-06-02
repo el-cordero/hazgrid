@@ -1,16 +1,16 @@
 Package: hazgrid
 Title: Programmable Hazus-Style Hazard and Loss Workflows
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: person("El", "Cordero", role = c("aut", "cre"),
-    email = "el.cordero@example.com")
+    email = "33505811+el-cordero@users.noreply.github.com")
 Description: Provides transparent, staged, terra-first building hazard and loss
     workflows inspired by Federal Emergency Management Agency (FEMA) Hazus
     methods. The initial implementation supports tsunami depth, velocity, and
-    momentum-flux inputs with user-supplied fragility and loss-ratio tables, plus
-    a small earthquake damage MVP using user-supplied hazard rasters and
-    fragility tables. It is an independent implementation framework and does
-    not reproduce official Hazus results without validated inputs and lookup
-    tables.
+    momentum-flux inputs with validated fragility and loss-ratio tables, plus an
+    earthquake capacity-spectrum framework using user-supplied hazard rasters
+    and validated lookup tables. It is an independent implementation framework
+    and does not reproduce official Hazus results without validated inputs and
+    lookup tables.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Depends:

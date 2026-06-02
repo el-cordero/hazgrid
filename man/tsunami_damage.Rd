@@ -8,7 +8,8 @@ tsunami_damage(
   exposure,
   fragility_table,
   structural_driver = "HV2",
-  flood_driver = "H"
+  flood_driver = "H",
+  allow_demo_tables = FALSE
 )
 }
 \arguments{
@@ -19,6 +20,9 @@ tsunami_damage(
 \item{structural_driver}{Structural hazard field, normally \code{"HV2"}.}
 
 \item{flood_driver}{Flood-like hazard field, normally \code{"H"}.}
+
+\item{allow_demo_tables}{Allow synthetic demo tables. Never use this for
+real-world analysis.}
 }
 \value{
 Asset-level table with component damage probabilities.

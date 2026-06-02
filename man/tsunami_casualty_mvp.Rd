@@ -2,32 +2,31 @@
 % Please edit documentation in R/tsunami_casualty.R
 \name{tsunami_casualty_mvp}
 \alias{tsunami_casualty_mvp}
-\title{Calculate tsunami casualty estimates with an MVP model}
+\title{Deprecated tsunami casualty wrapper}
 \usage{
 tsunami_casualty_mvp(
   exposure,
-  casualty_params = NULL,
+  casualty_params,
   population_field = "population_day",
-  depth_field = "H"
+  depth_field = "H",
+  allow_demo_tables = FALSE
 )
 }
 \arguments{
 \item{exposure}{Asset exposure table.}
 
-\item{casualty_params}{Optional data.frame or CSV path with \code{min_depth},
-\code{max_depth}, \code{fatality_rate}, and \code{injury_rate}. When \code{NULL}, conservative
-demo parameters are used with a warning.}
+\item{casualty_params}{Deprecated alias for \code{casualty_table}.}
 
 \item{population_field}{Population field in \code{exposure}.}
 
 \item{depth_field}{Depth field in \code{exposure}.}
+
+\item{allow_demo_tables}{Allow synthetic demo tables. Never use this for
+real-world analysis.}
 }
 \value{
-Asset-level table with expected fatalities and injuries.
+See \code{\link[=tsunami_casualty]{tsunami_casualty()}}.
 }
 \description{
-Applies a simple user-supplied depth-bin model to estimate expected
-fatalities and injuries. This is a placeholder interface for future work,
-not the complete Hazus tsunami casualty model. Depth thresholds must use the
-same units as the exposure depth field.
+Deprecated tsunami casualty wrapper
 }

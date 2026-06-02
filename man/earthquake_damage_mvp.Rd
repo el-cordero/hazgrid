@@ -2,23 +2,28 @@
 % Please edit documentation in R/earthquake_damage_mvp.R
 \name{earthquake_damage_mvp}
 \alias{earthquake_damage_mvp}
-\title{Calculate earthquake damage probabilities with an MVP model}
+\title{Deprecated earthquake damage wrapper}
 \usage{
-earthquake_damage_mvp(exposure, fragility_table, driver = "PGA")
+earthquake_damage_mvp(
+  exposure,
+  fragility_table,
+  driver = "PGA",
+  allow_demo_tables = FALSE
+)
 }
 \arguments{
-\item{exposure}{Asset exposure table returned by \code{\link[=extract_hazard]{extract_hazard()}}.}
+\item{exposure}{Asset exposure table.}
 
 \item{fragility_table}{Data.frame or CSV path containing \code{structure_type},
 \code{design_level}, \code{ds}, \code{median}, \code{beta}, and \code{driver}.}
 
-\item{driver}{Earthquake hazard field to apply, normally \code{"PGA"}.}
+\item{driver}{Deprecated. The fallback driver comes from \code{fragility_table}.}
+
+\item{allow_demo_tables}{Allow synthetic demo tables.}
 }
 \value{
-Asset-level table with mutually exclusive damage probabilities.
+See \code{\link[=earthquake_damage]{earthquake_damage()}}.
 }
 \description{
-Applies user-supplied lognormal fragility curves to an earthquake hazard
-driver. This is an MVP and does not implement the full Hazus capacity-spectrum
-method.
+Deprecated earthquake damage wrapper
 }

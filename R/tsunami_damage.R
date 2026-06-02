@@ -41,12 +41,14 @@
 #' @param fragility_table Data.frame or CSV path containing fragility curves.
 #' @param structural_driver Structural hazard field, normally `"HV2"`.
 #' @param flood_driver Flood-like hazard field, normally `"H"`.
+#' @param allow_demo_tables Allow synthetic demo tables. Never use this for
+#'   real-world analysis.
 #'
 #' @return Asset-level table with component damage probabilities.
 #' @export
 tsunami_damage <- function(
   exposure, fragility_table,
-  structural_driver = "HV2", flood_driver = "H"
+  structural_driver = "HV2", flood_driver = "H", allow_demo_tables = FALSE
 ) {
   if (!is.data.frame(exposure)) {
     stop("exposure must be a data.frame.", call. = FALSE)
@@ -56,12 +58,8 @@ tsunami_damage <- function(
     c("structure_type", "design_level", structural_driver, flood_driver),
     "exposure"
   )
-  fragility <- .as_lookup_table(fragility_table, "fragility_table")
-  .require_columns(
-    fragility,
-    c("structure_type", "design_level", "component", "ds", "median", "beta", "driver"),
-    "fragility_table"
-  )
+  fragility <- .as_hazgrid_lookup(fragility_table, "tsunami_fragility")
+  .assert_lookup_allowed(fragility, allow_demo_tables)
   states <- c("slight", "moderate", "extensive", "complete")
   components <- c(
     structure = structural_driver,

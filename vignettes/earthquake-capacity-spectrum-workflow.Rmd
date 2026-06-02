@@ -1,0 +1,41 @@
+---
+title: "Earthquake Capacity-Spectrum Workflow"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Earthquake Capacity-Spectrum Workflow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+library(hazgrid)
+library(terra)
+ext <- function(...) system.file("extdata", ..., package = "hazgrid")
+```
+
+The earthquake workflow is being upgraded toward the Hazus capacity-spectrum
+method. It requires validated lookup tables for real analysis. The current
+implementation uses an elastic-demand intersection; full effective-damping
+iteration remains under development.
+
+Typed lookup-table templates are installed under `inst/extdata/schemas/`.
+Populate them from official FEMA Hazus or independently validated sources.
+
+```{r earthquake, eval=FALSE}
+result <- run_earthquake_loss(
+  inventory = "path/to/inventory.gpkg",
+  pga = rast("path/to/pga.tif"),
+  sa03 = rast("path/to/sa03.tif"),
+  sa10 = rast("path/to/sa10.tif"),
+  capacity_table = "path/to/validated_capacity_curve.csv",
+  structural_fragility_table = "path/to/validated_structural_fragility.csv"
+)
+```
+
+The demand-spectrum stage is independently inspectable:
+
+```{r spectrum}
+spectrum <- build_demand_spectrum(pga = 0.2, sa03 = 0.5, sa10 = 0.25)
+head(spectrum)
+```

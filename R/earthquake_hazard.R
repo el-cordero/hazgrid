@@ -14,7 +14,8 @@
 #' Prepare earthquake hazard layers
 #'
 #' Combines aligned user-supplied ShakeMap-style or other earthquake hazard
-#' rasters. This MVP does not implement legacy Hazus attenuation relationships.
+#' rasters. This function does not implement legacy Hazus attenuation
+#' relationships.
 #'
 #' @param pga Single-layer peak ground acceleration raster.
 #' @param sa03 Single-layer 0.3-second spectral acceleration raster.

@@ -21,6 +21,7 @@ summarize_by <- function(results, group_fields) {
   sum_fields <- intersect(
     c(
       "structural_loss", "nonstructural_loss", "contents_loss", "total_loss",
+      "nonstructural_drift_loss", "nonstructural_acceleration_loss",
       "expected_fatalities", "expected_injuries"
     ),
     names(results)
@@ -37,6 +38,10 @@ summarize_by <- function(results, group_fields) {
     return(output)
   }
   groups <- results[group_fields]
+  for (field in group_fields) {
+    groups[[field]] <- as.character(groups[[field]])
+    groups[[field]][is.na(groups[[field]]) | !nzchar(groups[[field]])] <- "(missing)"
+  }
   key <- interaction(groups, drop = TRUE, lex.order = TRUE)
   split_rows <- split(seq_len(nrow(results)), key)
   output <- do.call(rbind, lapply(split_rows, function(rows) {

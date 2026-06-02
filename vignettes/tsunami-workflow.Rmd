@@ -11,35 +11,41 @@ vignette: >
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 library(hazgrid)
 library(terra)
-ext <- function(filename) system.file("extdata", filename, package = "hazgrid")
+ext <- function(...) system.file("extdata", ..., package = "hazgrid")
 ```
 
 `hazgrid` separates tsunami hazard preparation, hazard extraction, damage
-probabilities, and expected economic loss. The bundled lookup tables use
-invented demonstration values and must not be treated as official Hazus values.
+probabilities, casualties, expected economic loss, assumptions, and lookup
+validation. Real analyses require official FEMA Hazus or independently
+validated lookup tables.
+
+Typed schema templates are installed under `inst/extdata/schemas/`. Populate
+them from official FEMA Hazus sources or independently validated tables before
+running a real analysis.
 
 ## Level 2: Depth and velocity
 
-```{r level2}
-inventory <- read_inventory(ext("synthetic_buildings.gpkg"))
-depth <- rast(ext("synthetic_depth.tif"))
-velocity <- rast(ext("synthetic_velocity.tif"))
-
-hazard_l2 <- prepare_tsunami_hazard(depth, velocity = velocity)
-exposure_l2 <- extract_hazard(hazard_l2, inventory)
-damage_l2 <- tsunami_damage(exposure_l2, ext("tsunami_fragility_example.csv"))
-loss_l2 <- tsunami_economic_loss(damage_l2, ext("tsunami_loss_ratios_example.csv"))
-summarize_by(loss_l2, "municipality")
+```{r level2, eval=FALSE}
+result <- run_tsunami_loss(
+  inventory = "path/to/inventory.gpkg",
+  depth = rast("path/to/depth.tif"),
+  velocity = rast("path/to/velocity.tif"),
+  fragility_table = "path/to/validated_tsunami_fragility.csv",
+  loss_ratio_table = "path/to/validated_tsunami_loss_ratio.csv"
+)
 ```
 
 ## Level 3: Depth and momentum flux
 
-```{r level3}
-flux <- compute_tsunami_momentum_flux(depth, velocity)
-hazard_l3 <- prepare_tsunami_hazard(depth, momentum_flux = flux)
-names(hazard_l3)
+```{r level3, eval=FALSE}
+result <- run_tsunami_loss(
+  inventory = "path/to/inventory.gpkg",
+  depth = rast("path/to/depth.tif"),
+  momentum_flux = rast("path/to/momentum_flux.tif"),
+  fragility_table = "path/to/validated_tsunami_fragility.csv",
+  loss_ratio_table = "path/to/validated_tsunami_loss_ratio.csv"
+)
 ```
 
-The structural layer is `HV2`. Nonstructural, contents, and the casualty MVP
-use `H`. `tsunami_casualty_mvp()` is intentionally a replaceable placeholder,
-not the complete Hazus casualty model.
+The structural layer is `HV2`. Nonstructural, contents, and casualty methods
+use `H`. Use `read_hazgrid_lookup()` to load validated tables for real analyses.

@@ -1,0 +1,40 @@
+---
+title: "Earthquake Synthetic Demo Workflow"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Earthquake Synthetic Demo Workflow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+library(hazgrid)
+library(terra)
+ext <- function(...) system.file("extdata", ..., package = "hazgrid")
+```
+
+This example uses invented synthetic lookup values. It demonstrates the
+capacity-spectrum framework only. Do not use these tables for real-world
+estimates or decisions. The full Hazus effective-damping iteration remains
+under development.
+
+```{r earthquake}
+result <- suppressWarnings(run_earthquake_loss(
+  inventory = ext("synthetic_buildings.gpkg"),
+  pga = rast(ext("synthetic_pga.tif")),
+  sa03 = rast(ext("synthetic_sa03.tif")),
+  sa10 = rast(ext("synthetic_sa10.tif")),
+  pgv = rast(ext("synthetic_pgv.tif")),
+  capacity_table = ext("demo", "demo_earthquake_capacity_curve.csv"),
+  structural_fragility_table = ext("demo", "demo_earthquake_structural_fragility.csv"),
+  drift_fragility_table = ext("demo", "demo_earthquake_nonstructural_drift_fragility.csv"),
+  accel_fragility_table = ext("demo", "demo_earthquake_nonstructural_acceleration_fragility.csv"),
+  loss_ratio_table = ext("demo", "demo_earthquake_loss_ratio.csv"),
+  allow_demo_tables = TRUE,
+  group_fields = "municipality"
+))
+
+result$summary
+result$lookup_validation
+```

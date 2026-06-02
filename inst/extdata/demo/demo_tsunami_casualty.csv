@@ -1,0 +1,5 @@
+"min_depth","max_depth","fatality_rate","injury_rate","source_name","source_version","source_table","source_page","validated_by","validation_date","validation_status","units","notes"
+-Inf,0.5,0,0,"hazgrid synthetic demo","0.1.0","invented synthetic values","not_applicable","not_validated_demo_only","2026-06-02","demo_only","m","Invented synthetic demo values; not official FEMA Hazus values; do not use for real decisions."
+0.5,2,0.001,0.01,"hazgrid synthetic demo","0.1.0","invented synthetic values","not_applicable","not_validated_demo_only","2026-06-02","demo_only","m","Invented synthetic demo values; not official FEMA Hazus values; do not use for real decisions."
+2,5,0.01,0.05,"hazgrid synthetic demo","0.1.0","invented synthetic values","not_applicable","not_validated_demo_only","2026-06-02","demo_only","m","Invented synthetic demo values; not official FEMA Hazus values; do not use for real decisions."
+5,Inf,0.05,0.15,"hazgrid synthetic demo","0.1.0","invented synthetic values","not_applicable","not_validated_demo_only","2026-06-02","demo_only","m","Invented synthetic demo values; not official FEMA Hazus values; do not use for real decisions."

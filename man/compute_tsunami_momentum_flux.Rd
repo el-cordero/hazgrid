@@ -4,7 +4,12 @@
 \alias{compute_tsunami_momentum_flux}
 \title{Compute tsunami momentum flux}
 \usage{
-compute_tsunami_momentum_flux(depth, velocity, name = "HV2")
+compute_tsunami_momentum_flux(
+  depth,
+  velocity,
+  name = "HV2",
+  auto_convert_units = FALSE
+)
 }
 \arguments{
 \item{depth}{Inundation depth raster or numeric vector.}
@@ -12,6 +17,8 @@ compute_tsunami_momentum_flux(depth, velocity, name = "HV2")
 \item{velocity}{Flow velocity raster or numeric vector.}
 
 \item{name}{Output raster layer name.}
+
+\item{auto_convert_units}{Convert metric velocity from \code{"cm/s"} to \code{"m/s"}.}
 }
 \value{
 A raster or numeric vector containing \code{H * V^2}.

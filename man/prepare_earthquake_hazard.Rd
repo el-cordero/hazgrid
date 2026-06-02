@@ -20,5 +20,6 @@ A \code{terra::SpatRaster} with \code{PGA}, \code{SA03}, \code{SA10}, and option
 }
 \description{
 Combines aligned user-supplied ShakeMap-style or other earthquake hazard
-rasters. This MVP does not implement legacy Hazus attenuation relationships.
+rasters. This function does not implement legacy Hazus attenuation
+relationships.
 }

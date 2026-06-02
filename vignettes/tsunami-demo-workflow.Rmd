@@ -1,0 +1,36 @@
+---
+title: "Tsunami Synthetic Demo Workflow"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Tsunami Synthetic Demo Workflow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+library(hazgrid)
+library(terra)
+ext <- function(...) system.file("extdata", ..., package = "hazgrid")
+```
+
+This example uses invented synthetic lookup values. It demonstrates package
+plumbing only. Do not use these tables for real-world estimates or decisions.
+
+```{r demo}
+result <- run_tsunami_loss(
+  inventory = ext("synthetic_buildings.gpkg"),
+  depth = rast(ext("synthetic_depth.tif")),
+  velocity = rast(ext("synthetic_velocity.tif")),
+  fragility_table = ext("demo", "demo_tsunami_fragility.csv"),
+  loss_ratio_table = ext("demo", "demo_tsunami_loss_ratio.csv"),
+  casualty_table = ext("demo", "demo_tsunami_casualty.csv"),
+  include_casualties = TRUE,
+  population_field = "population_day",
+  group_fields = "municipality",
+  allow_demo_tables = TRUE
+)
+
+result$summary
+result$lookup_validation
+```

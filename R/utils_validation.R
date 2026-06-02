@@ -106,7 +106,8 @@
 }
 
 .write_workflow_outputs <- function(
-  prefix, tables, inventory, asset_table, output_dir
+  prefix, tables, inventory, asset_table, output_dir,
+  assumptions = NULL, lookup_validation = NULL
 ) {
   if (is.null(output_dir)) {
     return(character())
@@ -131,5 +132,15 @@
   vector_path <- file.path(output_dir, paste0(prefix, "_assets.gpkg"))
   terra::writeVector(vector_output, vector_path, overwrite = TRUE)
   paths[["assets_gpkg"]] <- vector_path
+  if (!is.null(assumptions)) {
+    assumptions_path <- file.path(output_dir, paste0(prefix, "_assumptions.json"))
+    write_assumptions(assumptions, assumptions_path)
+    paths[["assumptions"]] <- assumptions_path
+  }
+  if (!is.null(lookup_validation)) {
+    lookup_path <- file.path(output_dir, paste0(prefix, "_lookup_validation.csv"))
+    utils::write.csv(lookup_validation, lookup_path, row.names = FALSE)
+    paths[["lookup_validation"]] <- lookup_path
+  }
   paths
 }

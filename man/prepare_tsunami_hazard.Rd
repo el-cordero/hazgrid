@@ -8,7 +8,8 @@ prepare_tsunami_hazard(
   depth,
   velocity = NULL,
   momentum_flux = NULL,
-  level = c("auto", "level2", "level3")
+  level = c("auto", "level2", "level3"),
+  auto_convert_units = FALSE
 )
 }
 \arguments{
@@ -19,6 +20,9 @@ prepare_tsunami_hazard(
 \item{momentum_flux}{Optional single-layer momentum-flux raster.}
 
 \item{level}{One of \code{"auto"}, \code{"level2"}, or \code{"level3"}.}
+
+\item{auto_convert_units}{Convert metric velocity from \code{"cm/s"} to \code{"m/s"}
+before computing momentum flux.}
 }
 \value{
 A \code{terra::SpatRaster} with layers \code{H}, optional \code{V}, and \code{HV2}.

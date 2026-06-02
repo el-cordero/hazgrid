@@ -4,13 +4,16 @@
 \alias{tsunami_economic_loss}
 \title{Calculate tsunami expected economic losses}
 \usage{
-tsunami_economic_loss(damage, loss_ratio_table)
+tsunami_economic_loss(damage, loss_ratio_table, allow_demo_tables = FALSE)
 }
 \arguments{
 \item{damage}{Asset damage table returned by \code{\link[=tsunami_damage]{tsunami_damage()}}.}
 
 \item{loss_ratio_table}{Data.frame or CSV path containing \code{component},
 \code{damage_state}, and \code{loss_ratio}.}
+
+\item{allow_demo_tables}{Allow synthetic demo tables. Never use this for
+real-world analysis.}
 }
 \value{
 Asset-level expected loss table.

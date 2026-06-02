@@ -37,6 +37,22 @@
   stop("Unsupported ", quantity, " unit: ", unit, call. = FALSE)
 }
 
+.unit_system <- function(unit, quantity) {
+  unit <- .normalize_unit(unit, quantity)
+  if (is.na(unit)) {
+    return(NA_character_)
+  }
+  metric <- switch(
+    quantity,
+    depth = "m",
+    velocity = c("m/s", "cm/s"),
+    acceleration = c("g", "m/s2", "cm/s2"),
+    momentum_flux = "m3/s2",
+    stop("Unsupported unit quantity: ", quantity, call. = FALSE)
+  )
+  if (unit %in% metric) "metric" else "imperial"
+}
+
 .get_units <- function(x) {
   if (inherits(x, "SpatRaster")) {
     value <- terra::units(x)
@@ -103,7 +119,10 @@ convert_hazard_units <- function(
   .set_units(x * .unit_factor(from, to, quantity), to)
 }
 
-.validate_tsunami_units <- function(depth, velocity = NULL, momentum_flux = NULL) {
+.validate_tsunami_units <- function(
+  depth, velocity = NULL, momentum_flux = NULL,
+  auto_convert_units = FALSE
+) {
   depth_unit <- .normalize_unit(.get_units(depth), "depth")
   if (is.na(depth_unit)) {
     warning(
@@ -123,11 +142,18 @@ convert_hazard_units <- function(
     }
     if (
       !is.na(depth_unit) && !is.na(velocity_unit) &&
-      ((depth_unit == "m") != (velocity_unit == "m/s"))
+      .unit_system(depth_unit, "depth") != .unit_system(velocity_unit, "velocity")
     ) {
       stop(
-        "Depth and velocity units are not directly compatible. ",
+        "Depth and velocity units use different measurement systems. ",
         "Convert them explicitly with convert_hazard_units().",
+        call. = FALSE
+      )
+    }
+    if (!is.na(velocity_unit) && velocity_unit == "cm/s" && !isTRUE(auto_convert_units)) {
+      stop(
+        "Velocity in cm/s must be explicitly converted to m/s before computing ",
+        "H * V^2, or set auto_convert_units = TRUE.",
         call. = FALSE
       )
     }
@@ -143,7 +169,7 @@ convert_hazard_units <- function(
     }
     if (
       !is.na(depth_unit) && !is.na(flux_unit) &&
-      ((depth_unit == "m") != (flux_unit == "m3/s2"))
+      .unit_system(depth_unit, "depth") != .unit_system(flux_unit, "momentum_flux")
     ) {
       stop(
         "Depth and momentum-flux units use different measurement systems. ",
@@ -161,5 +187,5 @@ convert_hazard_units <- function(
   if (is.na(depth_unit) || is.na(velocity_unit)) {
     return(NA_character_)
   }
-  if (depth_unit == "m") "m3/s2" else "ft3/s2"
+  if (.unit_system(depth_unit, "depth") == "metric") "m3/s2" else "ft3/s2"
 }

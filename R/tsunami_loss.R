@@ -21,21 +21,19 @@
 #' @param damage Asset damage table returned by [tsunami_damage()].
 #' @param loss_ratio_table Data.frame or CSV path containing `component`,
 #'   `damage_state`, and `loss_ratio`.
+#' @param allow_demo_tables Allow synthetic demo tables. Never use this for
+#'   real-world analysis.
 #'
 #' @return Asset-level expected loss table.
 #' @export
-tsunami_economic_loss <- function(damage, loss_ratio_table) {
+tsunami_economic_loss <- function(
+  damage, loss_ratio_table, allow_demo_tables = FALSE
+) {
   if (!is.data.frame(damage)) {
     stop("damage must be a data.frame.", call. = FALSE)
   }
-  loss_ratios <- .as_lookup_table(loss_ratio_table, "loss_ratio_table")
-  .require_columns(
-    loss_ratios, c("component", "damage_state", "loss_ratio"),
-    "loss_ratio_table"
-  )
-  if (any(loss_ratios$loss_ratio < 0 | loss_ratios$loss_ratio > 1, na.rm = TRUE)) {
-    stop("loss ratios must be between zero and one.", call. = FALSE)
-  }
+  loss_ratios <- .as_hazgrid_lookup(loss_ratio_table, "tsunami_loss_ratio")
+  .assert_lookup_allowed(loss_ratios, allow_demo_tables)
   states <- c("none", "slight", "moderate", "extensive", "complete")
   output <- damage
   output$structural_loss_ratio <- .component_loss_ratio(

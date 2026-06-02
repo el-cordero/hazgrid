@@ -11,6 +11,12 @@ run_tsunami_loss(
   momentum_flux = NULL,
   fragility_table,
   loss_ratio_table,
+  casualty_table = NULL,
+  include_casualties = FALSE,
+  population_field = NULL,
+  assumptions = NULL,
+  allow_demo_tables = FALSE,
+  auto_convert_units = FALSE,
   output_dir = NULL,
   group_fields = NULL
 )
@@ -28,13 +34,26 @@ run_tsunami_loss(
 
 \item{loss_ratio_table}{Data.frame or CSV path with expected loss ratios.}
 
+\item{casualty_table}{Optional validated tsunami casualty table.}
+
+\item{include_casualties}{Calculate casualty outputs.}
+
+\item{population_field}{Population field used for casualty calculations.}
+
+\item{assumptions}{Optional \code{\link[=hazgrid_assumptions]{hazgrid_assumptions()}} object.}
+
+\item{allow_demo_tables}{Allow synthetic demo tables. Never use this for
+real-world analysis.}
+
+\item{auto_convert_units}{Convert metric velocity from \code{"cm/s"} to \code{"m/s"}.}
+
 \item{output_dir}{Optional output directory.}
 
 \item{group_fields}{Optional fields passed to \code{\link[=summarize_by]{summarize_by()}}.}
 }
 \value{
-A list containing \code{exposure}, \code{damage}, \code{loss}, \code{summary}, and
-\code{output_paths}.
+A list containing workflow tables, assumptions, lookup validation,
+and output paths.
 }
 \description{
 Runs inventory reading, tsunami hazard preparation, hazard extraction,

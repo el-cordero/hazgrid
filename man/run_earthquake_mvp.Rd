@@ -2,7 +2,7 @@
 % Please edit documentation in R/run_earthquake_mvp.R
 \name{run_earthquake_mvp}
 \alias{run_earthquake_mvp}
-\title{Run the earthquake damage MVP workflow}
+\title{Deprecated earthquake workflow wrapper}
 \usage{
 run_earthquake_mvp(
   inventory,
@@ -12,7 +12,8 @@ run_earthquake_mvp(
   pgv = NULL,
   fragility_table,
   output_dir = NULL,
-  group_fields = NULL
+  group_fields = NULL,
+  allow_demo_tables = FALSE
 )
 }
 \arguments{
@@ -26,18 +27,17 @@ run_earthquake_mvp(
 
 \item{pgv}{Optional peak ground velocity raster or path.}
 
-\item{fragility_table}{Data.frame or CSV path with earthquake fragility curves.}
+\item{fragility_table}{Deprecated simple-fragility table.}
 
 \item{output_dir}{Optional output directory.}
 
 \item{group_fields}{Optional fields passed to \code{\link[=summarize_by]{summarize_by()}}.}
+
+\item{allow_demo_tables}{Allow synthetic demo tables.}
 }
 \value{
-A list containing \code{exposure}, \code{damage}, \code{summary}, and \code{output_paths}.
+A list containing exposure, damage, summary, and output paths.
 }
 \description{
-Runs inventory reading, earthquake hazard preparation, hazard extraction,
-fragility-based damage probabilities, optional summaries, and optional
-CSV/GeoPackage output writing. This is not the full Hazus capacity-spectrum
-method.
+Deprecated earthquake workflow wrapper
 }
